@@ -1,2 +1,2 @@
 # aws-lambda-client
-AWS Lambda python client derived from boto3 
+A simple AWS Lambda python client
