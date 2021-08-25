@@ -1,0 +1,58 @@
+from aws_lambda_client.models.arn import ARN
+from aws_lambda_client.api_creator import ApiCreator
+from aws_lambda_client.requester import AWSLambdaRequester
+
+class LambdaClient:
+    """Creates a lambda client.
+        Can take credentials for custom access.
+        kwargs:
+            AWS_SECRET_ACCESS_KEY (str)
+            AWS_ACCESS_KEY_ID (str)
+            AWS_SESSION_TOKEN (str)
+    """
+    def __init__(self, **creds):
+        secret = creds.get('AWS_SECRET_ACCESS_KEY')
+        access_key = creds.get('AWS_ACCESS_KEY_ID')
+        session_token = creds.get('AWS_SESSION_TOKEN')
+        
+        self.api_creator = ApiCreator()
+        self.requester = AWSLambdaRequester(secret, access_key, session_token)
+
+    def invoke(self, **info):
+        """Invokes a lambda function.
+            kwargs:
+                arn (str) : fully qualified ARN of function to be invoked (without qualifier)
+                payload (Dict) : JSON event
+                qualifier (str) :  version or alias to invoke a published version of the function.
+                invocation_type (str) : RequestResponse | Event | DryRun
+                log_type (str) : Tail | None
+        Raises:
+            Exception: if any configuration error occurs
+
+        Returns:
+            response: response object for corresponding http request
+        """
+        arn = info.get('arn')
+        payload = info.get('payload')
+        qualifier = info.get('version')
+        invocation_type = info.get('invocation_type')
+        log_type = info.get('log_type')
+        if arn is None:
+            raise Exception("Empty ARN")
+        
+        arn = ARN(arn)
+        partition = arn.get_partition()
+        region = arn.get_region()
+        url = self.api_creator.create_api(partition,
+            region,
+            "/2015-03-31/functions/{FunctionName}/invocations",
+            {"Qualifier": qualifier},
+            "https",
+            {"FunctionName": str(arn)}
+        )
+        headers = {
+            "Content-Type": "application/json"
+        }
+        return self.requester.call('POST', headers, url, payload)
+
+
