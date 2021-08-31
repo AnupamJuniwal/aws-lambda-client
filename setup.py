@@ -1,9 +1,6 @@
 #!/usr/bin/env python
-
+from os import path
 from setuptools import setup, find_packages
-
-# get all requirements from requirements.txt
-requires = [i.strip() for i in open("requirements.txt").readlines()]
 
 setup(
     name='aws_lambda_client',
@@ -20,7 +17,10 @@ setup(
         ]
     },
     include_package_data=True,
-    install_requires=requires,
+    install_requires = [
+        'requests',
+        'wheel'
+    ],
     license="GNU General Public License v3.0",
     project_urls={
         'Documentation': 'https://github.com/AnupamJuniwal/aws-lambda-client',
