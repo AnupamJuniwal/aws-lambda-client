@@ -25,7 +25,7 @@ class LambdaClient:
             kwargs:
                 arn (str) : fully qualified ARN of function to be invoked (without qualifier)
                 payload (Dict) : JSON event
-                qualifier (str) :  version or alias to invoke a published version of the function.
+                version (str) :  version or alias to invoke a published version of the function.
                 invocation_type (str) : RequestResponse | Event | DryRun
                 log_type (str) : Tail | None
         Raises:
@@ -41,7 +41,11 @@ class LambdaClient:
         log_type = info.get('log_type')
         if arn is None:
             raise Exception("Empty ARN")
-        
+        if payload is None:
+            raise Exception("Empty Payload")
+        if qualifier is None:
+            raise Exception("Empty Version")
+
         arn = ARN(arn)
         partition = arn.get_partition()
         region = arn.get_region()
@@ -54,7 +58,9 @@ class LambdaClient:
             {"FunctionName": str(arn)}
         )
         headers = {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'X-Amz-Invocation-Type': invocation_type,
+            'X-Amz-Log-Type': log_type
         }
         return self.requester.call('POST', url, host, headers, payload)
 

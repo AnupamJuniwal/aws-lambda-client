@@ -66,9 +66,9 @@ class ApiCreator:
             partition (str): partition info
             region (str): region info
             api (str): api endpoint template of the service function
-            query (str): any query param
+            query (str): any query param, Empty dictionary if none
             protocol (str): protocol of request - http | https
-            api_params (Dict): used to flatten the api endpoint provided
+            api_params (Dict): used to flatten the api endpoint provided, Empty dictionary if none
         Raises:
             Exception: api_params do not match with api template
 
