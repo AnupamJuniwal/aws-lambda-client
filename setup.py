@@ -18,8 +18,7 @@ setup(
     },
     include_package_data=True,
     install_requires = [
-        'requests',
-        'wheel'
+        'requests'
     ],
     license="GNU General Public License v3.0",
     project_urls={
