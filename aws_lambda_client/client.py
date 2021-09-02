@@ -25,7 +25,7 @@ class LambdaClient:
             kwargs:
                 arn (str) : fully qualified ARN of function to be invoked (without qualifier)
                 payload (Dict) : JSON event
-                qualifier (str) :  version or alias to invoke a published version of the function.
+                version (str) :  version or alias to invoke a published version of the function.
                 invocation_type (str) : RequestResponse | Event | DryRun
                 log_type (str) : Tail | None
         Raises:
@@ -54,7 +54,9 @@ class LambdaClient:
             {"FunctionName": str(arn)}
         )
         headers = {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'X-Amz-Invocation-Type': invocation_type,
+            'X-Amz-Log-Type': log_type
         }
         return self.requester.call('POST', url, host, headers, payload)
 
