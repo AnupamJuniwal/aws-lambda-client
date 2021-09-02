@@ -79,3 +79,4 @@ class ArnTest(unittest.TestCase):
         obj = ARN(test_arn)
         assert obj is not None
         assert str(obj) == test_arn
+    
