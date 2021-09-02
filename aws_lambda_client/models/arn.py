@@ -2,12 +2,12 @@ import re
 
 ARN_REGEX = "(arn:(aws[a-zA-Z-]*):lambda:)([a-z]{2}(-gov)?-[a-z]+-\d{1}:)(\d{12}:)(function:)([a-zA-Z0-9-_\.]+)$"
 matcher = re.compile(ARN_REGEX)
+
+INVALID_ARN_ERROR_MSG_TEMPLATE = 'Provided ARN: {} must be of the format: arn:partition:service:region:account:resource:resource_name'
 class ARN:
     def __init__(self, arn):
         if matcher.match(arn) is None:
-            raise Exception(
-            'Provided ARN: {} must be of the format: \
-                arn:partition:service:region:account:resource:resource_name'.format(arn))
+            raise Exception(INVALID_ARN_ERROR_MSG_TEMPLATE.format(arn))
 
         arn_prefix, partition, service, region, account, resource, resource_name = arn.split(':', 6)
         self.partition = partition

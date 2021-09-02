@@ -41,7 +41,11 @@ class LambdaClient:
         log_type = info.get('log_type')
         if arn is None:
             raise Exception("Empty ARN")
-        
+        if payload is None:
+            raise Exception("Empty Payload")
+        if qualifier is None:
+            raise Exception("Empty Version")
+
         arn = ARN(arn)
         partition = arn.get_partition()
         region = arn.get_region()
