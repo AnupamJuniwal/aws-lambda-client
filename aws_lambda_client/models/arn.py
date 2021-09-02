@@ -1,6 +1,12 @@
+import re
+
+ARN_REGEX = "(arn:(aws[a-zA-Z-]*):lambda:)([a-z]{2}(-gov)?-[a-z]+-\d{1}:)(\d{12}:)(function:)([a-zA-Z0-9-_\.]+)$"
+matcher = re.compile(ARN_REGEX)
 class ARN:
     def __init__(self, arn):
         try:
+            if matcher.match(arn) is None: raise Exception()
+
             arn_prefix, partition, service, region, account, resource = arn.split(':', 5)
             self.partition = partition
             self.service = service
