@@ -6,11 +6,6 @@ from aws_lambda_client import requester, aws_auth
 
 AWSLambdaRequester = requester.AWSLambdaRequester
 
-class AWSRequestsAuthMock:
-    def __init__(self, *args, **kwargs):
-        self.args = args
-        self.kwargs = kwargs
-
 TEST_AWS_SECRET_ACCESS_KEY = "AWS_SECRET_ACCESS_KEY"
 TEST_AWS_ACCESS_KEY_ID = "AWS_ACCESS_KEY_ID"
 TEST_AWS_SESSION_TOKEN = "AWS_SESSION_TOKEN"
@@ -28,51 +23,51 @@ class RequesterTest(unittest.TestCase):
     def test_should_pick_up_credentials_from_environment(self):
         req = AWSLambdaRequester()
 
-        assert req is not None
-        assert req.aws_access_key_id == TEST_AWS_ACCESS_KEY_ID
-        assert req.aws_region == TEST_AWS_DEFAULT_REGION
-        assert req.aws_secret_access_key == TEST_AWS_SECRET_ACCESS_KEY
-        assert req.aws_session_token == TEST_AWS_SESSION_TOKEN
+        self.assertIsNotNone(req)
+        self.assertEquals(req.aws_access_key_id, TEST_AWS_ACCESS_KEY_ID)
+        self.assertEquals(req.aws_region, TEST_AWS_DEFAULT_REGION)
+        self.assertEquals(req.aws_secret_access_key, TEST_AWS_SECRET_ACCESS_KEY)
+        self.assertEquals(req.aws_session_token, TEST_AWS_SESSION_TOKEN)
 
 
     def test_should_override_region_with_passed_value(self):
         req = AWSLambdaRequester(region='us-west-2')
 
-        assert req is not None
-        assert req.aws_access_key_id == TEST_AWS_ACCESS_KEY_ID
-        assert req.aws_region == 'us-west-2'
-        assert req.aws_secret_access_key == TEST_AWS_SECRET_ACCESS_KEY
-        assert req.aws_session_token == TEST_AWS_SESSION_TOKEN
+        self.assertIsNotNone(req)
+        self.assertEquals(req.aws_access_key_id, TEST_AWS_ACCESS_KEY_ID)
+        self.assertEquals(req.aws_region, 'us-west-2')
+        self.assertEquals(req.aws_secret_access_key, TEST_AWS_SECRET_ACCESS_KEY)
+        self.assertEquals(req.aws_session_token, TEST_AWS_SESSION_TOKEN)
    
 
     def test_should_override_access_key_with_passed_value(self):
         req = AWSLambdaRequester(access_key='access_key')
 
-        assert req is not None
-        assert req.aws_access_key_id == 'access_key'
-        assert req.aws_region == TEST_AWS_DEFAULT_REGION
-        assert req.aws_secret_access_key == TEST_AWS_SECRET_ACCESS_KEY
-        assert req.aws_session_token == TEST_AWS_SESSION_TOKEN
+        self.assertIsNotNone(req)
+        self.assertEquals(req.aws_access_key_id, 'access_key')
+        self.assertEquals(req.aws_region, TEST_AWS_DEFAULT_REGION)
+        self.assertEquals(req.aws_secret_access_key, TEST_AWS_SECRET_ACCESS_KEY)
+        self.assertEquals(req.aws_session_token, TEST_AWS_SESSION_TOKEN)
 
 
     def test_should_override_secret_with_passed_value(self):
         req = AWSLambdaRequester(secret='secret')
 
-        assert req is not None
-        assert req.aws_access_key_id == TEST_AWS_ACCESS_KEY_ID
-        assert req.aws_region == TEST_AWS_DEFAULT_REGION
-        assert req.aws_secret_access_key == 'secret'
-        assert req.aws_session_token == TEST_AWS_SESSION_TOKEN
+        self.assertIsNotNone(req)
+        self.assertEquals(req.aws_access_key_id, TEST_AWS_ACCESS_KEY_ID)
+        self.assertEquals(req.aws_region, TEST_AWS_DEFAULT_REGION)
+        self.assertEquals(req.aws_secret_access_key, 'secret')
+        self.assertEquals(req.aws_session_token, TEST_AWS_SESSION_TOKEN)
 
 
     def test_should_override_session_token_with_passed_value(self):
         req = AWSLambdaRequester(session_token='token')
 
-        assert req is not None
-        assert req.aws_access_key_id == TEST_AWS_ACCESS_KEY_ID
-        assert req.aws_region == TEST_AWS_DEFAULT_REGION
-        assert req.aws_secret_access_key == TEST_AWS_SECRET_ACCESS_KEY
-        assert req.aws_session_token == 'token'
+        self.assertIsNotNone(req)
+        self.assertEquals(req.aws_access_key_id, TEST_AWS_ACCESS_KEY_ID)
+        self.assertEquals(req.aws_region, TEST_AWS_DEFAULT_REGION)
+        self.assertEquals(req.aws_secret_access_key, TEST_AWS_SECRET_ACCESS_KEY)
+        self.assertEquals(req.aws_session_token, 'token')
 
 
     @mock.patch('aws_lambda_client.aws_auth.AWSRequestsAuth.__init__')

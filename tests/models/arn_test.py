@@ -3,6 +3,9 @@ from tests import mock, unittest
 from tests.models import arn
 
 ARN = arn.ARN
+INVALID_ARN_ERROR_MSG_TEMPLATE = arn.INVALID_ARN_ERROR_MSG_TEMPLATE
+
+TEST_ARN = 'arn:aws:lambda:us-west-2:000000000000:function:test-function-name'
 class ArnTest(unittest.TestCase):
     def setUp(self):
         self.target = ARN
@@ -16,67 +19,68 @@ class ArnTest(unittest.TestCase):
         except Exception as e:
             error = e
             error_msg = str(e)
-        
-        assert error is not None
-        assert error_msg is not None
+
+        self.assertIsNotNone(error)
+        self.assertIsNotNone(error_msg)
+        self.assertEquals(error_msg, INVALID_ARN_ERROR_MSG_TEMPLATE.format('ABC'))
 
     
     def test_should_return_a_valid_object_if_correct_arn_passed(self):
-        obj = ARN('arn:aws:lambda:us-west-2:000000000000:function:test-function-name')
-        assert obj is not None
-        assert obj.__class__.__module__ == 'aws_lambda_client.models.arn'
+        obj = ARN(TEST_ARN)
+        self.assertIsNotNone(obj)
+        self.assertEquals(obj.__class__.__module__, 'aws_lambda_client.models.arn')
     
     
     def test_should_parse_and_return_partition(self):
-        obj = ARN('arn:aws:lambda:us-west-2:000000000000:function:test-function-name')
-        assert obj is not None
-        assert obj.get_partition() == 'aws'
+        obj = ARN(TEST_ARN)
+        self.assertIsNotNone(obj)
+        self.assertEquals(obj.get_partition(), 'aws')
 
     
     def test_should_parse_and_return_account(self):
-        obj = ARN('arn:aws:lambda:us-west-2:000000000000:function:test-function-name')
-        assert obj is not None
-        assert obj.get_account() == '000000000000'
+        obj = ARN(TEST_ARN)
+        self.assertIsNotNone(obj)
+        self.assertEquals(obj.get_account(), '000000000000')
 
     
     def test_should_parse_and_return_region(self):
-        obj = ARN('arn:aws:lambda:us-west-2:000000000000:function:test-function-name')
-        assert obj is not None
-        assert obj.get_region() == 'us-west-2'
+        obj = ARN(TEST_ARN)
+        self.assertIsNotNone(obj)
+        self.assertEquals(obj.get_region(), 'us-west-2')
 
 
     def test_should_parse_and_return_function_name(self):
-        obj = ARN('arn:aws:lambda:us-west-2:000000000000:function:test-function-name')
-        assert obj is not None
-        assert obj.get_resource_name() == 'test-function-name'
+        obj = ARN(TEST_ARN)
+        self.assertIsNotNone(obj)
+        self.assertEquals(obj.get_resource_name(), 'test-function-name')
     
     def test_should_parse_and_return_resource(self):
-        obj = ARN('arn:aws:lambda:us-west-2:000000000000:function:test-function-name')
-        assert obj is not None
-        assert obj.get_resource() == 'function'
+        obj = ARN(TEST_ARN)
+        self.assertIsNotNone(obj)
+        self.assertEquals(obj.get_resource(), 'function')
 
 
     def test_should_parse_and_return_service(self):
-        obj = ARN('arn:aws:lambda:us-west-2:000000000000:function:test-function-name')
-        assert obj is not None
-        assert obj.get_service() == 'lambda'
+        obj = ARN(TEST_ARN)
+        self.assertIsNotNone(obj)
+        self.assertEquals(obj.get_service(), 'lambda')
 
 
     def test_should_parse_and_return_all_details(self):
-        obj = ARN('arn:aws:lambda:us-west-2:000000000000:function:test-function-name')
+        obj = ARN(TEST_ARN)
         details = obj.get_details()
-        assert obj is not None
-        assert details is not None
-        assert details.get('service') == 'lambda'
-        assert details.get('resource_name') == 'test-function-name'
-        assert details.get('resource') == 'function'
-        assert details.get('region') == 'us-west-2'
-        assert details.get('account') == '000000000000'
-        assert details.get('partition') == 'aws'
+        self.assertIsNotNone(obj)
+        self.assertIsNotNone(details)
+        self.assertEquals(details.get('service'), 'lambda')
+        self.assertEquals(details.get('resource_name'), 'test-function-name')
+        self.assertEquals(details.get('resource'), 'function')
+        self.assertEquals(details.get('region'), 'us-west-2')
+        self.assertEquals(details.get('account'), '000000000000')
+        self.assertEquals(details.get('partition'), 'aws')
     
     def test_should_return_original_arn_as_str_representation(self):
-        test_arn = 'arn:aws:lambda:us-west-2:000000000000:function:test-function-name'
+        test_arn = TEST_ARN
         obj = ARN(test_arn)
-        assert obj is not None
-        assert str(obj) == test_arn
+        self.assertIsNotNone(obj)
+        self.assertEquals(str(obj), test_arn)
     
