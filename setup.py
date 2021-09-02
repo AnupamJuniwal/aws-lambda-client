@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='aws_lambda_client',
-    version='0.0.1',
+    version='0.1.0',
     description='Lambda client on simple http requests',
     long_description=open('README.md').read(),
     author='AnupamJuniwal',
